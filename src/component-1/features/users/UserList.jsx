@@ -5,7 +5,7 @@ import ModalUser from '../../Modals/ModalUser'
 
 export default function UserList() {
     const [modal, setModal] = useState(false)
-    const [id, setId] = useState("")
+    const [item, setItem] = useState("")
     const dispatch = useDispatch()
     const users = useSelector((state) => state?.users?.data)
     useEffect(() => {
@@ -14,14 +14,13 @@ export default function UserList() {
 
     const openModal = () => {
         setModal(true)
-        setId("")
+        setItem("")
     }
 
     const edit = (item) => {
         setModal(true) 
-        setId(item)
+        setItem(item)
         dispatch(updateUser(item))
-        console.log(item);
     }
 
     const remove = (id) => {
@@ -32,7 +31,7 @@ export default function UserList() {
 
     return (
         <div className=' container'>
-            <ModalUser open={modal} toggle={() => setModal(false)} id={id}/>
+            <ModalUser open={modal} toggle={() => setModal(false)} item={item}/>
             <div className="row my-3">
                 <div className="col-3">
                     <button onClick={openModal} className='btn btn-primary'>add user</button>

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-const URL = "http://localhost:5000/users"
+const URL = "http://localhost:3000/users"
 
 export const fetchUser = createAsyncThunk("users/fetchUser", async () => {
     const response = await axios.get(URL)
@@ -8,12 +8,12 @@ export const fetchUser = createAsyncThunk("users/fetchUser", async () => {
 })
 
 export const adduser = createAsyncThunk("users/adduser", async (payload) => {
-    const response = await axios.post(URL, payload)
+    const response = await axios.post(`${URL}`, { ...payload })
     return response
 })
 
-export const updateUser = createAsyncThunk("users/updateUser", async (payload) => {
-    const response = await axios.put(`${URL}/${payload.id}`, payload)
+export const updateUser = createAsyncThunk("users/updateUser", async ({id, payload}) => {
+    const response = await axios.put(`${URL}/${id}`, payload)
     return response
 })
 
@@ -35,11 +35,12 @@ const UserSlice = createSlice({
                 state?.data?.push(action.payload)
             })
             .addCase(updateUser.fulfilled, (state, action) => {
-                const update_user = action.payload
-                const index = state.data.findIndex(item => item.id === update_user.id);
+                let updated_user = action.payload
+                let index = state?.data?.findIndex((item) => item.id === paylaod.id)
                 if (index) {
-                    state.data[index] = update_user
+                    state.data[index] = updated_user
                 }
+                console.log(updated_user);
             })
             .addCase(removeUser.fulfilled, (state, action) => {
                 state.data.filter(item => item.id === action.id)
